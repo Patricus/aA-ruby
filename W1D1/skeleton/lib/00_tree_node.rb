@@ -27,4 +27,25 @@ class PolyTreeNode
     @children -= [child]
     child.parent = (nil)
   end
+
+  def dfs(target_value)
+    return self if self.value == target_value
+    return nil if @children.empty?
+
+    @children.each do |child|
+      result = child.dfs(target_value)
+      return result unless result == nil
+    end
+    nil
+  end
+
+  def bfs(target_value)
+    search_array = []
+    search_array << self
+    until search_array.empty?
+      return search_array.first if search_array.first.value == target_value
+      search_array.first.children.each { |child| search_array << child }
+      search_array.shift
+    end
+  end
 end
