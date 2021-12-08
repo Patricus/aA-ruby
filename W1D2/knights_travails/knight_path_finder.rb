@@ -32,8 +32,15 @@ class KnightPathFinder
 
   def build_move_tree(start_position)
     new_move_positions(start_position.value).each do |position|
-      start_position.add_child(position)
+      position.parent = start_position
       build_move_tree(position)
     end
   end
+
+  def find_path(end_position)
+    @root_node.bfs(end_position)
+  end
 end
+
+k = KnightPathFinder.new([3,3])
+p k.find_path([7,5])
