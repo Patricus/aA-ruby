@@ -2,10 +2,9 @@ require_relative 'poly_tree_node.rb'
 
 class KnightPathFinder
   def initialize(start_position)
-    @start_position = start_position
-    @root_node = PolyTreeNode.new(@start_position)
-    @considered_positions = [@start_position]
-    @tree = build_move_tree(@root_node)
+    @root_node = PolyTreeNode.new(start_position)
+    @considered_positions = [start_position]
+    build_move_tree
   end
 
   def self.valid_moves(position)
@@ -27,13 +26,19 @@ class KnightPathFinder
     moves = KnightPathFinder.valid_moves(position)
     moves.select! { |move| !@considered_positions.include?(move) }
     @considered_positions += moves
-    moves.map { |move| PolyTreeNode.new(move) }
+    moves
   end
 
-  def build_move_tree(start_position)
-    new_move_positions(start_position.value).each do |position|
-      position.parent = start_position
-      build_move_tree(position)
+  def build_move_tree
+    new_moves = [@root_node]
+    until new_moves.empty?
+      new_positions = new_move_positions(new_moves.first.value)
+      new_positions.each do |position|
+        position = PolyTreeNode.new(position)
+        position.parent = new_moves.first
+        new_moves << position
+      end
+      new_moves.shift
     end
   end
 
@@ -41,14 +46,12 @@ class KnightPathFinder
     trace_path_back(@root_node.bfs(end_position))
   end
 
-  def trace_path_back(path)
-    trace_path = [path.value]
-    node = path
-    while node.parent != nil
-      trace_path << node.parent.value
-      node = node.parent
+  def trace_path_back(end_position)
+    path = [end_position]
+    while path.first.parent != nil
+      path.unshift(path.first.parent)
     end
-    trace_path.reverse
+    path.map(&:value)
   end
 end
 
