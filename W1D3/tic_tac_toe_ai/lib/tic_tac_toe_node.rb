@@ -21,7 +21,15 @@ class TicTacToeNode
     true
   end
 
-  def winning_node?(evaluator); end
+  def winning_node?(evaluator)
+    if self.children.any? do |child|
+         child.losing_node?(evaluator == :x ? :o : :x)
+       end
+      return true
+    end
+
+    false
+  end
 
   # This method generates an array of all moves that can be made after
   # the current move.
