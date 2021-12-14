@@ -5,7 +5,10 @@ class SuperComputerPlayer < ComputerPlayer
     node = TicTacToeNode.new(game.board, mark)
     moves = node.children
     moves.reject! { |move| move.losing_node?(mark) }
-    moves.find { |move| move.winning_node?(mark) }.prev_move_pos
+    raise 'We didn\'t play perfectly' if moves.empty?
+    the_move = moves.find { |move| move.winning_node?(mark) }
+    the_move = moves.sample if !the_move
+    the_move.prev_move_pos
   end
 end
 
