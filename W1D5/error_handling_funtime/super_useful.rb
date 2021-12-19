@@ -1,26 +1,32 @@
 # PHASE 2
 def convert_to_int(str)
-  Integer(str)
+  begin
+    Integer(str)
+  rescue => exception
+    puts 'Enter a number:'
+    str = gets.chomp
+    retry
+  end
 end
 
 # PHASE 3
-FRUITS = ["apple", "banana", "orange"]
+FRUITS = %w[apple banana orange]
 
 def reaction(maybe_fruit)
   if FRUITS.include? maybe_fruit
     puts "OMG, thanks so much for the #{maybe_fruit}!"
-  else 
-    raise StandardError 
-  end 
+  else
+    raise StandardError
+  end
 end
 
 def feed_me_a_fruit
-  puts "Hello, I am a friendly monster. :)"
+  puts 'Hello, I am a friendly monster. :)'
 
-  puts "Feed me a fruit! (Enter the name of a fruit:)"
+  puts 'Feed me a fruit! (Enter the name of a fruit:)'
   maybe_fruit = gets.chomp
-  reaction(maybe_fruit) 
-end  
+  reaction(maybe_fruit)
+end
 
 # PHASE 4
 class BestFriend
@@ -39,8 +45,6 @@ class BestFriend
   end
 
   def give_friendship_bracelet
-    puts "Hey bestie, I made you a friendship bracelet. It says my name, #{@name}, so you never forget me." 
+    puts "Hey bestie, I made you a friendship bracelet. It says my name, #{@name}, so you never forget me."
   end
 end
-
-
