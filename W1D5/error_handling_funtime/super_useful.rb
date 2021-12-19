@@ -37,6 +37,9 @@ end
 # PHASE 4
 class BestFriend
   def initialize(name, yrs_known, fav_pastime)
+    raise 'No name' if @name.length < 1
+    raise 'Known years less than 5' if yrs_known < 5
+    raise 'No favorite pastime' if @fav_pastime.length < 1
     @name = name
     @yrs_known = yrs_known
     @fav_pastime = fav_pastime
