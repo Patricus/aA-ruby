@@ -15,6 +15,8 @@ FRUITS = %w[apple banana orange]
 def reaction(maybe_fruit)
   if FRUITS.include? maybe_fruit
     puts "OMG, thanks so much for the #{maybe_fruit}!"
+  elsif maybe_fruit == 'coffee'
+    raise ArgumentError
   else
     raise StandardError
   end
@@ -22,10 +24,14 @@ end
 
 def feed_me_a_fruit
   puts 'Hello, I am a friendly monster. :)'
-
-  puts 'Feed me a fruit! (Enter the name of a fruit:)'
-  maybe_fruit = gets.chomp
-  reaction(maybe_fruit)
+  begin
+    puts 'Feed me a fruit! (Enter the name of a fruit:)'
+    maybe_fruit = gets.chomp
+    reaction(maybe_fruit)
+  rescue ArgumentError => exception
+    retry
+  rescue => exception
+  end
 end
 
 # PHASE 4
