@@ -11,7 +11,9 @@ class Piece
 
   def valid_moves; end
 
-  def pos=(val); end
+  def pos=(val)
+    @position = val
+  end
 
   def symbol; end
 
