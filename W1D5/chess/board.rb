@@ -1,10 +1,11 @@
+require_relative 'piece.rb'
+require_relative 'null_piece.rb'
+
 class Board
   def initialize
-    @rows = Array.new(8) { Array.new(8) }
-
-    private
-
-    @null_piece
+    @NullPiece = NullPiece.instance
+    @rows = Array.new(8) { Array.new(8) { @NullPiece } }
+    @rows[0].map! { |piece| piece = Piece.new(:black, self, 'test') }
   end
 
   def [](position)
@@ -16,7 +17,16 @@ class Board
   end
 
   def move_piece(color, start_pos, end_pos)
-    self[start_pos]
+    if !self[start_pos] || self[start_pos] = @NullPiece
+      raise "No piece at #{start_pos}"
+    end
+    if !(0...8).to_a.include?(end_pos[0]) || !(0...8).to_a.include?(end_pos[1])
+      raise "#{end_pos} is not a valid move"
+    end
+
+    self[start_pos], self[end_pos] = self[end_pos], self[start_pos]
+
+    self[end_pos].pos = end_pos
   end
 
   def valid_pos?(pos); end
