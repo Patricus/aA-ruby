@@ -5,6 +5,7 @@ require_relative 'bishop.rb'
 require_relative 'queen.rb'
 require_relative 'king.rb'
 require_relative 'knight.rb'
+require_relative 'pawn.rb'
 
 class Board
   def initialize
@@ -19,6 +20,7 @@ class Board
     place_rooks
     place_knights
     place_bishops
+    place_pawns
   end
 
   def place_kings
@@ -68,6 +70,17 @@ class Board
     @rows[7][5] = white_right_knight
   end
 
+  def place_pawns
+    @rows[1].each_with_index do |pos, idx|
+      pos = Pawn.new(:black, self, [1, idx])
+      @rows[1][idx] = pos
+    end
+    @rows[6].each_with_index do |pos, idx|
+      pos = Pawn.new(:white, self, [6, idx])
+      @rows[6][idx] = pos
+    end
+  end
+
   def [](position)
     @rows[position[0]][position[1]]
   end
@@ -87,11 +100,10 @@ class Board
 
     if piece.moves.include?(end_pos)
       piece, self[end_pos] = self[end_pos], piece
+      piece.pos = end_pos
     else
       puts "#{piece} to #{end_pos} is an invalid move!"
     end
-
-    piece.pos = end_pos
   end
 
   def valid_pos?(x, y)
@@ -114,12 +126,14 @@ class Board
 end
 
 b = Board.new
-puts b[[0, 1]]
-p b[[0, 1]].valid_moves
-b.move_piece(:black, [0, 1], [2, 2])
-puts b[[2, 2]]
-b.move_piece(:black, [0, 3], [4, 0])
-puts b[[4, 0]]
+# puts b[[0, 1]]
+# p b[[0, 1]].valid_moves
+# b.move_piece(:black, [0, 1], [2, 2])
+# puts b[[2, 2]]
+puts b[[0, 3]]
+puts b[[1, 3]]
 b.move_piece(:black, [0, 3], [4, 3])
 puts b[[4, 3]]
-puts b[[0, 0]]
+# b.move_piece(:black, [0, 3], [4, 3])
+# puts b[[4, 3]]
+# puts b[[0, 0]]
