@@ -42,6 +42,10 @@ module Slidable
       x += dx
       y += dy
     end
+    if (0...8).to_a.include?(x + dx) && (0...8).to_a.include?(y + dy) &&
+         @board[[x + dx, y + dy]].color != self.color
+      moves << [x + dx, y + dy]
+    end
     moves
   end
 end
