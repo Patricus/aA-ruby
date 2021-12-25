@@ -5,9 +5,15 @@ class Piece
     @position = position
   end
 
-  def to_s; end
+  def to_s
+    return if self.class == NullPiece
+    "#{@color.capitalize} #{self.class.name.split('::').last}"
+  end
 
-  def empty?; end
+  def empty?
+    return true if self.class == NullPiece
+    false
+  end
 
   def valid_moves; end
 
