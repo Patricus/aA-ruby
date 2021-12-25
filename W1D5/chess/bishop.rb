@@ -5,7 +5,7 @@ class Bishop < Piece
   include Slidable
 
   def symbol
-    "\u2657".encode('utf-8')
+    self.color == :white ? "\u2657".encode('utf-8') : "\u265D".encode('utf-8')
   end
 
   private

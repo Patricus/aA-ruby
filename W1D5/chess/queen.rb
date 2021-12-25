@@ -5,7 +5,7 @@ class Queen < Piece
   include Slidable
 
   def symbol
-    "\u2655".encode('utf-8')
+    self.color == :white ? "\u2655".encode('utf-8') : "\u265B".encode('utf-8')
   end
 
   private

@@ -5,7 +5,7 @@ class Rook < Piece
   include Slidable
 
   def symbol
-    "\u2656".encode('utf-8')
+    self.color == :white ? "\u2656".encode('utf-8') : "\u265C".encode('utf-8')
   end
 
   private

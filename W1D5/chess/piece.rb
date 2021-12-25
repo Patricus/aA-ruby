@@ -16,7 +16,9 @@ class Piece
     false
   end
 
-  def valid_moves; end
+  def valid_moves
+    self.moves
+  end
 
   def pos=(val)
     @position = val

@@ -3,6 +3,8 @@ require_relative 'null_piece.rb'
 require_relative 'rook.rb'
 require_relative 'bishop.rb'
 require_relative 'queen.rb'
+require_relative 'king.rb'
+require_relative 'knight.rb'
 
 class Board
   def initialize
@@ -12,9 +14,18 @@ class Board
   end
 
   def setup
+    place_kings
     place_queens
     place_rooks
     place_knights
+    place_bishops
+  end
+
+  def place_kings
+    black_king = King.new(:black, self, [0, 4])
+    @rows[0][4] = black_king
+    white_king = King.new(:white, self, [7, 4])
+    @rows[7][4] = white_king
   end
 
   def place_queens
@@ -36,14 +47,25 @@ class Board
   end
 
   def place_knights
-    black_left_knight = Piece.new(:black, self, [0, 1])
+    black_left_knight = Knight.new(:black, self, [0, 1])
     @rows[0][1] = black_left_knight
-    black_right_knight = Piece.new(:black, self, [0, 6])
+    black_right_knight = Knight.new(:black, self, [0, 6])
     @rows[0][6] = black_right_knight
-    white_left_knight = Piece.new(:white, self, [7, 1])
+    white_left_knight = Knight.new(:white, self, [7, 1])
     @rows[7][1] = white_left_knight
-    white_right_knight = Piece.new(:white, self, [7, 6])
+    white_right_knight = Knight.new(:white, self, [7, 6])
     @rows[7][6] = white_right_knight
+  end
+
+  def place_bishops
+    black_left_knight = Bishop.new(:black, self, [0, 2])
+    @rows[0][2] = black_left_knight
+    black_right_knight = Bishop.new(:black, self, [0, 5])
+    @rows[0][5] = black_right_knight
+    white_left_knight = Bishop.new(:white, self, [7, 2])
+    @rows[7][2] = white_left_knight
+    white_right_knight = Bishop.new(:white, self, [7, 5])
+    @rows[7][5] = white_right_knight
   end
 
   def [](position)
@@ -57,7 +79,7 @@ class Board
   def move_piece(color, start_pos, end_pos)
     raise "No piece at #{start_pos}" if self[start_pos] == @NullPiece
 
-    if !(0...8).to_a.include?(end_pos[0]) || !(0...8).to_a.include?(end_pos[1])
+    if !valid_pos?(end_pos.first, end_pos.last)
       raise "#{end_pos} is not a valid move"
     end
 
@@ -72,7 +94,9 @@ class Board
     piece.pos = end_pos
   end
 
-  # def valid_pos?(pos); end
+  def valid_pos?(x, y)
+    (0...8).to_a.include?(x) && (0...8).to_a.include?(y)
+  end
 
   # def add_piece(piece, color); end
 
@@ -90,8 +114,10 @@ class Board
 end
 
 b = Board.new
-puts b[[0, 3]]
-puts b[[4, 7]]
+puts b[[0, 1]]
+p b[[0, 1]].valid_moves
+b.move_piece(:black, [0, 1], [2, 2])
+puts b[[2, 2]]
 b.move_piece(:black, [0, 3], [4, 0])
 puts b[[4, 0]]
 b.move_piece(:black, [0, 3], [4, 3])

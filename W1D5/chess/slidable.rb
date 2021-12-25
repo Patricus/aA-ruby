@@ -36,13 +36,12 @@ module Slidable
     x = @position[0]
     y = @position[1]
 
-    while (0...8).to_a.include?(x + dx) && (0...8).to_a.include?(y + dy) &&
-            @board[[x + dx, y + dy]].empty?
+    while @board.valid_pos?(x + dx, y + dy) && @board[[x + dx, y + dy]].empty?
       moves << [x + dx, y + dy]
       x += dx
       y += dy
     end
-    if (0...8).to_a.include?(x + dx) && (0...8).to_a.include?(y + dy) &&
+    if @board.valid_pos?(x + dx, y + dy) &&
          @board[[x + dx, y + dy]].color != self.color
       moves << [x + dx, y + dy]
     end
