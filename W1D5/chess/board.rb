@@ -8,6 +8,8 @@ require_relative 'knight.rb'
 require_relative 'pawn.rb'
 
 class Board
+  attr_reader :rows
+
   def initialize
     @NullPiece = NullPiece.instance
     @rows = Array.new(8) { Array.new(8) { @NullPiece } }
@@ -124,16 +126,3 @@ class Board
 
   # def move_piece!(color, start_pos, end_pos); end
 end
-
-b = Board.new
-# puts b[[0, 1]]
-# p b[[0, 1]].valid_moves
-# b.move_piece(:black, [0, 1], [2, 2])
-# puts b[[2, 2]]
-puts b[[0, 3]]
-puts b[[1, 3]]
-b.move_piece(:black, [0, 3], [4, 3])
-puts b[[4, 3]]
-# b.move_piece(:black, [0, 3], [4, 3])
-# puts b[[4, 3]]
-# puts b[[0, 0]]
