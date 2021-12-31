@@ -7,8 +7,15 @@ class Pawn < Piece
 
   def moves
     moves = []
-    move << [@position.first + forward_dir * 2, @position.last] if at_start_row?
-    moves + forward_steps + side_attacks
+    if at_start_row?
+      double_move = [@position.first + forward_dir * 2, @position.last]
+      moves << double_move if @board[double_move].empty?
+    end
+    if @board.valid_pos?(forward_steps.first, forward_steps.last) &&
+         @board[forward_steps].empty?
+      moves << forward_steps
+    end
+    moves + side_attacks
   end
 
   private
@@ -29,11 +36,16 @@ class Pawn < Piece
   def side_attacks
     attacks = []
     move = forward_steps
-    if @board[[move.first, move.last - 1]].color != self.color
-      move << [move.first, move.last - 1]
+    if @board.valid_pos?(move.first, move.last - 1) &&
+         @board[[move.first, move.last - 1]].class != NullPiece &&
+         @board[[move.first, move.last - 1]].color != self.color
+      attacks << [move.first, move.last - 1]
     end
-    if @board[[move.first, move.last + 1]].color != self.color
-      move << [move.first, move.last + 1]
+    if @board.valid_pos?(move.first, move.last + 1) &&
+         @board[[move.first, move.last + 1]].class != NullPiece &&
+         @board[[move.first, move.last + 1]].color != self.color
+      attacks << [move.first, move.last + 1]
     end
+    attacks
   end
 end

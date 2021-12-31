@@ -84,14 +84,87 @@ class Board
   end
 
   def [](position)
-    @rows[position[0]][position[1]]
+    @rows[position[0]][position[1]] if valid_pos?(position.first, position.last)
   end
 
   def []=(position, value)
-    @rows[position[0]][position[1]] = value
+    @rows[position[0]][position[1]] = value if valid_pos?(
+      position.first,
+      position.last,
+    )
   end
 
   def move_piece(color, start_pos, end_pos)
+    raise "No piece at #{start_pos}" if self[start_pos] == @NullPiece
+
+    if !valid_pos?(end_pos.first, end_pos.last)
+      raise "#{end_pos} is not a valid move"
+    end
+
+    piece = self[start_pos]
+
+    # other_piece = self[end_pos]
+
+    if piece.moves.include?(end_pos)
+      # other_piece.pos = start_pos
+      piece.pos = end_pos
+      self[end_pos] = piece
+      self[start_pos] = @NullPiece
+    else
+      raise "#{piece} to #{end_pos} is an invalid move!"
+    end
+  end
+
+  def valid_pos?(x, y)
+    [0, 1, 2, 3, 4, 5, 6, 7].include?(x) && [0, 1, 2, 3, 4, 5, 6, 7].include?(y)
+  end
+
+  # def add_piece(piece, color); end
+
+  def checkmate?(color)
+    return true if in_check?(color) && @rows.find_king(color).valid_moves.empty?
+
+    false
+  end
+
+  def in_check?(color)
+    king_pos = find_king(color)
+    @rows.each do |row|
+      row.each do |piece|
+        return true if piece.color != color && piece.moves.include?(king_pos)
+      end
+    end
+    false
+  end
+
+  def find_king(color)
+    @rows.each_with_index do |row, row_index|
+      row.each_with_index do |piece, col_index|
+        if piece.class == King && piece.color == color
+          return row_index, col_index
+        end
+      end
+    end
+  end
+
+  # def pieces; end
+
+  def dup
+    board_copy = Board.new
+    @rows.each_with_index do |row, row_index|
+      row.each_with_index do |piece, col_index|
+        if @rows[row_index][col_index].class == NullPiece
+          board_copy[[row_index, col_index]] = @NullPiece
+        else
+          board_copy[[row_index, col_index]] =
+            piece.class.new(piece.color, board_copy, [row_index, col_index])
+        end
+      end
+    end
+    board_copy
+  end
+
+  def move_piece!(color, start_pos, end_pos)
     raise "No piece at #{start_pos}" if self[start_pos] == @NullPiece
 
     if !valid_pos?(end_pos.first, end_pos.last)
@@ -104,25 +177,7 @@ class Board
       piece, self[end_pos] = self[end_pos], piece
       piece.pos = end_pos
     else
-      puts "#{piece} to #{end_pos} is an invalid move!"
+      raise "#{piece} to #{end_pos} is an invalid move!"
     end
   end
-
-  def valid_pos?(x, y)
-    (0...8).to_a.include?(x) && (0...8).to_a.include?(y)
-  end
-
-  # def add_piece(piece, color); end
-
-  # def checkmate?(color); end
-
-  # def in_check?(color); end
-
-  # def find_king(color); end
-
-  # def pieces; end
-
-  # def dup; end
-
-  # def move_piece!(color, start_pos, end_pos); end
 end

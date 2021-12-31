@@ -17,7 +17,16 @@ class Piece
   end
 
   def valid_moves
-    self.moves
+    self.moves.select do |move|
+      move_board = @board.dup
+      begin
+        move_board.move_piece!(@color, @position, move)
+        false if @board.in_check?(@color)
+      rescue RuntimeError
+        false
+      end
+      true
+    end
   end
 
   def pos=(val)
