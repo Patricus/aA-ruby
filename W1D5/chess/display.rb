@@ -3,7 +3,7 @@ require_relative 'board.rb'
 require 'colorize'
 
 class Display
-  BG_COLORS = %i[black magenta green light_black]
+  BG_COLORS = %i[blue magenta green light_blue]
 
   def initialize()
     @board = Board.new
@@ -17,6 +17,7 @@ class Display
       row.each_with_index do |pos, pos_index|
         line +=
           (' ' + pos.symbol + '  ').colorize(
+            color: pos.color,
             background: back_ground(row_index, pos_index),
           )
       end
