@@ -17,16 +17,7 @@ class Piece
   end
 
   def valid_moves
-    self.moves.select do |move|
-      move_board = @board.dup
-      begin
-        move_board.move_piece!(@color, @position, move)
-        false if @board.in_check?(@color)
-      rescue RuntimeError
-        false
-      end
-      true
-    end
+    self.moves.reject { |move| !move_into_check?(move) }
   end
 
   def pos=(val)
@@ -37,5 +28,11 @@ class Piece
 
   private
 
-  def move_into_check?(end_pos); end
+  def move_into_check?(end_pos)
+    move_board = @board.dup
+    piece = move_board[@position]
+    move_board.move_piece!(@color, @position, end_pos)
+    return false if move_board.in_check?(piece.color)
+    true
+  end
 end

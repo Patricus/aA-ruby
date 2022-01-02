@@ -102,11 +102,9 @@ class Board
     end
 
     piece = self[start_pos]
-
-    # other_piece = self[end_pos]
+    raise 'Moving into check!' if !piece.valid_moves
 
     if piece.moves.include?(end_pos)
-      # other_piece.pos = start_pos
       piece.pos = end_pos
       self[end_pos] = piece
       self[start_pos] = @NullPiece
@@ -119,10 +117,15 @@ class Board
     [0, 1, 2, 3, 4, 5, 6, 7].include?(x) && [0, 1, 2, 3, 4, 5, 6, 7].include?(y)
   end
 
-  # def add_piece(piece, color); end
+  def pieces(color)
+    @rows.flatten.select { |piece| piece.color == color }
+  end
 
   def checkmate?(color)
-    return true if in_check?(color) && @rows.find_king(color).valid_moves.empty?
+    if in_check?(color) &&
+         pieces(color).all? { |piece| piece.valid_moves.empty? }
+      return true
+    end
 
     false
   end
@@ -147,8 +150,6 @@ class Board
     end
   end
 
-  # def pieces; end
-
   def dup
     board_copy = Board.new
     @rows.each_with_index do |row, row_index|
@@ -165,19 +166,12 @@ class Board
   end
 
   def move_piece!(color, start_pos, end_pos)
-    raise "No piece at #{start_pos}" if self[start_pos] == @NullPiece
-
-    if !valid_pos?(end_pos.first, end_pos.last)
-      raise "#{end_pos} is not a valid move"
-    end
-
     piece = self[start_pos]
 
     if piece.moves.include?(end_pos)
-      piece, self[end_pos] = self[end_pos], piece
       piece.pos = end_pos
-    else
-      raise "#{piece} to #{end_pos} is an invalid move!"
+      self[end_pos] = piece
+      self[start_pos] = @NullPiece
     end
   end
 end

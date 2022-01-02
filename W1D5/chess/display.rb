@@ -26,6 +26,7 @@ class Display
       puts "#{@board[@cursor.cursor_pos]}"
       puts "White King pos:#{@board.find_king(:white)} - Black King pos:#{@board.find_king(:black)}"
       puts "White King check:#{@board.in_check?(:white)} - Black King check:#{@board.in_check?(:black)}"
+      puts "Checkmate White: #{@board.checkmate?(:white)} - Checkmate Black: #{@board.checkmate?(:black)}"
     end
     @cursor.get_input
   end
@@ -33,7 +34,7 @@ class Display
   def back_ground(row_index, pos_index)
     return BG_COLORS[2] if @cursor.cursor_pos == [row_index, pos_index]
     if @cursor.selected &&
-         @board[@cursor.selection].moves.include?([row_index, pos_index])
+         @board[@cursor.selection].valid_moves.include?([row_index, pos_index])
       return BG_COLORS[1]
     end
     return BG_COLORS.first if row_index.even? == pos_index.even?
