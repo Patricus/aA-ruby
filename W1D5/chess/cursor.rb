@@ -27,14 +27,13 @@ KEYMAP = {
 MOVES = { left: [0, -1], right: [0, 1], up: [-1, 0], down: [1, 0] }
 
 class Cursor
-  attr_reader :cursor_pos, :board, :selected, :selection, :debug
+  attr_reader :cursor_pos, :board, :selected, :debug
 
   def initialize(cursor_pos, board)
     @cursor_pos = cursor_pos
     @board = board
-    @selected = false
-    @selection = nil
-    @debug
+    @selected = nil
+    @debug = false
   end
 
   def get_input
@@ -43,7 +42,7 @@ class Cursor
   end
 
   def toggle_selected
-    @selected == true ? @selected = false : @selected = true
+    @selected ? @selected = nil : @selected = @cursor_pos
   end
 
   private
@@ -92,25 +91,15 @@ class Cursor
     case key
     when :up, :down, :left, :right
       update_pos(key)
-      nil
+      return nil
     when :tab
       @debug ? @debug = false : @debug = true
+      return nil
     when :space, :return
-      return if @board[@cursor_pos].class == NullPiece && !@selected
-      @selected ? @selected = false : @selected = true
-      if @selected
-        @selection = @cursor_pos
-        @selected = false if !@selection
-      else
-        if @cursor_pos != @selection
-          @board.move_piece(@board[@selection].color, @selection, @cursor_pos)
-        end
-        @selection = nil
-      end
+      toggle_selected
+      return @cursor_pos
     when :ctrl_c, :escape
       Process.exit(0)
-    else
-
     end
   end
 

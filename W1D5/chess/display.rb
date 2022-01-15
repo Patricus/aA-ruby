@@ -4,9 +4,11 @@ require 'colorize'
 
 class Display
   BG_COLORS = %i[blue magenta green light_blue]
+  attr_accessor :cursor
+  attr_reader :board
 
-  def initialize()
-    @board = Board.new
+  def initialize(board)
+    @board = board
     @cursor = Cursor.new([0, 0], @board)
   end
 
@@ -29,19 +31,15 @@ class Display
       puts "White King check:#{@board.in_check?(:white)} - Black King check:#{@board.in_check?(:black)}"
       puts "Checkmate White: #{@board.checkmate?(:white)} - Checkmate Black: #{@board.checkmate?(:black)}"
     end
-    @cursor.get_input
   end
 
   def back_ground(row_index, pos_index)
     return BG_COLORS[2] if @cursor.cursor_pos == [row_index, pos_index]
     if @cursor.selected &&
-         @board[@cursor.selection].valid_moves.include?([row_index, pos_index])
+         @board[@cursor.selected].valid_moves.include?([row_index, pos_index])
       return BG_COLORS[1]
     end
     return BG_COLORS.first if row_index.even? == pos_index.even?
     BG_COLORS.last
   end
 end
-
-d = Display.new
-d.render while true

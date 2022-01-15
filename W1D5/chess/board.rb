@@ -101,6 +101,8 @@ class Board
       raise "#{end_pos} is not a valid move"
     end
 
+    raise 'Wrong color!' if self[start_pos].color != color
+
     piece = self[start_pos]
     raise 'Moving into check!' if !piece.valid_moves
 
