@@ -55,9 +55,18 @@ class Tower_of_Hanoi
     @hand = nil
   end
 
-  def select_pile(selection)
-    if [1, 2, 3].include?(selection)
+  def pick_up(selection)
+    if [1, 2, 3].include?(selection.to_i)
       @hand = @pile[selection.to_i - 1].pop
+      return true
+    end
+    false
+  end
+
+  def put_down(selection)
+    if [1, 2, 3].include?(selection.to_i)
+      @pile[selection.to_i - 1] << @hand
+      @hand = nil
       return true
     end
     false

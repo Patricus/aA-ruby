@@ -42,14 +42,26 @@ describe Tower_of_Hanoi do
       expect(tower_of_hanoi.pile[1]).to eq([])
     end
   end
-  describe '#select_pile' do
-    it 'prompts the user to select a pile removing the disk from the pile' do
-      tower_of_hanoi.select_pile(1)
+  describe '#pick_up' do
+    it 'takes a disk from selected a pile, removing the disk from the pile' do
+      tower_of_hanoi.pick_up(1)
       expect(tower_of_hanoi.pile[0]).to eq([1, 2, 3])
     end
-    it 'places the selected rod into your hand' do
-      tower_of_hanoi.select_pile(1)
+    it 'places the top disk of selected pile into your hand' do
+      tower_of_hanoi.pick_up(1)
       expect(tower_of_hanoi.hand).to eq(4)
+    end
+  end
+  describe '#put_down' do
+    it 'places the disk in hand onto the selected pile' do
+      tower_of_hanoi.pick_up(1)
+      tower_of_hanoi.put_down(2)
+      expect(tower_of_hanoi.pile[1]).to eq([4])
+    end
+    it 'removes the disk from your hand' do
+      tower_of_hanoi.pick_up(1)
+      tower_of_hanoi.put_down(2)
+      expect(tower_of_hanoi.hand).to eq(nil)
     end
   end
 end
