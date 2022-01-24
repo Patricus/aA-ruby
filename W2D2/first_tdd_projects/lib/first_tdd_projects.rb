@@ -71,4 +71,9 @@ class Tower_of_Hanoi
     end
     false
   end
+
+  def won?
+    return true if @pile.last == [1, 2, 3, 4]
+    false
+  end
 end

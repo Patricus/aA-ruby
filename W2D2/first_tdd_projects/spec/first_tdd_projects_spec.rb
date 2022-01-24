@@ -64,4 +64,10 @@ describe Tower_of_Hanoi do
       expect(tower_of_hanoi.hand).to eq(nil)
     end
   end
+  describe '#won?' do
+    it 'checks to see if the last pile has all the disks in the right order' do
+      tower_of_hanoi.pile[2] = [1, 2, 3, 4]
+      expect(tower_of_hanoi.pile.last).to eq([1, 2, 3, 4])
+    end
+  end
 end
