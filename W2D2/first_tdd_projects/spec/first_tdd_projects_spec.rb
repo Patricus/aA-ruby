@@ -70,4 +70,22 @@ describe Tower_of_Hanoi do
       expect(tower_of_hanoi.pile.last).to eq([1, 2, 3, 4])
     end
   end
+  describe '#move' do
+    before { allow(tower_of_hanoi).to receive(:gets).and_return('1', '3') }
+    it 'prompts user to choose a pile to #pick_up and #put_down' do
+      tower_of_hanoi.move
+      expect(tower_of_hanoi.pile[0]).to eq([1, 2, 3])
+      expect(tower_of_hanoi.pile[2]).to eq([4])
+    end
+  end
+  describe '#play' do
+    before do
+      allow(tower_of_hanoi).to receive(:gets).and_return('1', '3')
+      allow(tower_of_hanoi).to receive(:won?).and_return(false, true)
+    end
+    it 'checks if won? before each #move and stops if true' do
+      expect(tower_of_hanoi).to receive(:won?).twice
+      tower_of_hanoi.play
+    end
+  end
 end

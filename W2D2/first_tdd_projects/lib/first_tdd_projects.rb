@@ -76,4 +76,18 @@ class Tower_of_Hanoi
     return true if @pile.last == [1, 2, 3, 4]
     false
   end
+
+  def move
+    puts 'Select a pile to pick up from:'
+    selection = 0
+    selection = gets.chomp until pick_up(selection)
+    puts 'Select a pile to put down to:'
+    selection = 0
+    selection = gets.chomp until put_down(selection)
+  end
+
+  def play
+    move until won?
+    puts 'You win!'
+  end
 end
